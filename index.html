@@ -85,6 +85,7 @@ nav a:hover{
   transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow:0 8px 25px rgba(0,0,0,0.15);
   border: none;
+  cursor: pointer;
 }
 .btn:hover{
   transform:translateY(-3px);
@@ -136,6 +137,13 @@ section>p{color:var(--muted)}
 .card h3{font-family:Georgia,serif;font-size:27px;font-weight:400;margin-top:0; color:var(--ink);}
 .card p{color:var(--muted)}
 
+.card-actions{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
 /* RECUADROS DE CARACTERÍSTICAS ASIMÉTRICOS */
 .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:45px}
 .features>div{
@@ -185,6 +193,89 @@ section>p{color:var(--muted)}
 .cta h2{color:#fff}.cta p{color:#cbd1cb}
 
 footer{background:#0f1712;color:#c5cbc5;padding:35px 7%;text-align:center;font-size:13px}
+
+/* MODAL / POPUP DE GALERÍA */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 18, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+.modal-content {
+  background: var(--bg);
+  padding: 30px;
+  border-radius: 28px;
+  max-width: 900px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(166, 138, 91, 0.3);
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+.modal-overlay.active .modal-content {
+  transform: translateY(0);
+}
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--dark);
+  color: #fff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.modal-close:hover {
+  background: var(--accent);
+}
+.modal-title {
+  font-family: Georgia, serif;
+  font-size: 28px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: var(--ink);
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+.gallery-grid img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.gallery-grid img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
 
 @media(max-width:800px){
   nav{width:92%;left:4%;padding:14px 5%;align-items:center;flex-direction:column;gap:12px;border-radius:25px;}
@@ -240,17 +331,23 @@ footer{background:#0f1712;color:#c5cbc5;padding:35px 7%;text-align:center;font-s
         <p>Villa moderna y luminosa con piscina privada y espectaculares vistas al océano.</p>
         <p><b>4 huéspedes · 2 dormitorios · 2 baños</b></p>
         <p>Piscina · Terraza · Vistas al mar · Parking · Wi-Fi</p>
-        <a class="btn" href="AIRBNB_VILLA_ATLANTICO">RESERVAR EN AIRBNB</a>
+        <div class="card-actions">
+          <button class="btn" onclick="openGallery('atlantico')">📸 Ver Galería</button>
+          <a class="btn alt" style="background:var(--dark); color:#fff;" href="AIRBNB_VILLA_ATLANTICO">RESERVAR EN AIRBNB</a>
+        </div>
       </div>
     </article>
     <article class="card">
-      <img src="images/villa-montana-placeholder.png" alt="Villa Montaña">
+     <img src="images/villa-montana-placeholder.png" alt="Villa Montaña">
       <div>
         <h3>Villa Montaña</h3>
         <p>Alojamiento acogedor rodeado de naturaleza y con vistas hacia las montañas.</p>
         <p><b>4 huéspedes · 2 dormitorios · 1 baño</b></p>
         <p>Piscina · Terraza · Barbacoa · Parking · Wi-Fi</p>
-        <a class="btn" href="AIRBNB_VILLA_MONTANA">RESERVAR EN AIRBNB</a>
+        <div class="card-actions">
+          <button class="btn" onclick="openGallery('montana')">📸 Ver Galería</button>
+          <a class="btn alt" style="background:var(--dark); color:#fff;" href="AIRBNB_VILLA_MONTANA">RESERVAR EN AIRBNB</a>
+        </div>
       </div>
     </article>
   </div>
@@ -292,5 +389,67 @@ footer{background:#0f1712;color:#c5cbc5;padding:35px 7%;text-align:center;font-s
   Reservas exclusivamente a través de Airbnb<br>
   © 2026 Villas La Palma
 </footer>
+
+<!-- MODAL GALERÍA -->
+<div class="modal-overlay" id="galleryModal" onclick="closeGalleryOnOverlay(event)">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeGallery()">&times;</button>
+    <h3 class="modal-title" id="galleryTitle">Galería de Fotos</h3>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+</div>
+
+<script>
+const galleries = {
+  atlantico: {
+    title: "Galería — Villa Atlántico",
+    images: [
+      { url: "images/villa1/photo-villa-1.avif", alt: "Vista Exterior Villa Atlántico" },
+      { url: "images/villa1/photo-villa-2.avif", alt: "Salón luminoso" },
+      { url: "images/villa1/photo-villa-3.avif", alt: "Piscina y Vistas al Mar" },
+      { url: "images/villa1/photo-villa-4.avif", alt: "Dormitorio Principal" },
+      { url: "images/villa1/photo-villa-5.avif", alt: "Baño Moderno" }
+    ]
+  },
+  montana: {
+    title: "Galería — Villa Montaña",
+    images: [
+      { url: "images/villa2/photo-villa-1.avif", alt: "Vista Exterior Villa Montaña" },
+      { url: "images/villa2/photo-villa-2.avif", alt: "Terraza y Barbacoa" },
+      { url: "images/villa2/photo-villa-3.avif", alt: "Salón Rústico" },
+      { url: "images/villa2/photo-villa-4.avif", alt: "Habitación Acogedora" },
+      { url: "images/villa2/photo-villa-5.avif", alt: "Entorno Natural" }
+    ]
+  }
+};
+
+function openGallery(key) {
+  const data = galleries[key];
+  if (!data) return;
+
+  document.getElementById('galleryTitle').innerText = data.title;
+  const grid = document.getElementById('galleryGrid');
+  grid.innerHTML = '';
+
+  data.images.forEach(img => {
+    const imgEl = document.createElement('img');
+    imgEl.src = img.url;
+    imgEl.alt = img.alt;
+    grid.appendChild(imgEl);
+  });
+
+  document.getElementById('galleryModal').classList.add('active');
+}
+
+function closeGallery() {
+  document.getElementById('galleryModal').classList.remove('active');
+}
+
+function closeGalleryOnOverlay(e) {
+  if (e.target.id === 'galleryModal') {
+    closeGallery();
+  }
+}
+</script>
 </body>
 </html>
