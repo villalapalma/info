@@ -20,6 +20,8 @@ h2{font-family:Georgia,serif;font-size:38px;text-align:center;font-weight:400}
 .card img{width:100%;height:280px;object-fit:cover;background:#ddd}
 .card div{padding:25px}
 .features{display:grid;grid-template-columns:repeat(3,1fr);gap:25px;text-align:center}
+.map-wrap{width:100%;overflow:hidden;border:1px solid #e6e2d8;background:#fff;box-shadow:0 8px 25px #00000012}
+.map-wrap iframe{display:block;width:100%;min-height:450px}
 .cta{background:#59683d;color:#fff;text-align:center;max-width:none}
 footer{background:#28311e;color:#fff;padding:35px 7%;text-align:center}
 @media(max-width:800px){.hero h1{font-size:44px}.grid,.features{grid-template-columns:1fr}nav{display:block}nav a{display:inline-block;margin:8px}}
@@ -44,7 +46,7 @@ footer{background:#28311e;color:#fff;padding:35px 7%;text-align:center}
 </header>
 
 <section>
-  <h2>Bienvenido a Villas La Palma en PuntaGorda</h2>
+  <h2>Bienvenido a Villas La Palma</h2>
   <p style="text-align:center;max-width:800px;margin:auto">
     Un lugar para desconectar, disfrutar de la naturaleza y descubrir la esencia de La Palma.
     Relájate junto a la piscina, contempla el océano al atardecer y descubre los paisajes volcánicos de la isla.
@@ -91,7 +93,13 @@ footer{background:#28311e;color:#fff;padding:35px 7%;text-align:center}
 
 <section id="ubicacion">
   <h2>Ubicación</h2>
-  <p style="text-align:center">Añade aquí el mapa de Google Maps de la ubicación real de cada villa.</p>
+  <p style="text-align:center;max-width:800px;margin:0 auto 30px">
+    Villa Majarona se encuentra en Puntagorda, al noroeste de La Palma,
+    en un entorno tranquilo rodeado de naturaleza y con espectaculares vistas.
+  </p>
+  <div class="map-wrap">
+    <iframe src="https://www.google.com/maps?q=Villa+Majarona,+Puntagorda,+La+Palma,+Canarias&output=embed" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Ubicación de Villa Majarona en Puntagorda, La Palma"></iframe>
+  </div>
 </section>
 
 <section class="cta" id="contacto">
